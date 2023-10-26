@@ -1,0 +1,29 @@
+---
+- hosts: all
+  name: Setup Nginx Balancer
+  tasks:
+    - name: install nginx
+      package:
+        name: nginx
+        state: present
+        update_cache: yes
+      notify: restart nginx
+    - name: create conf.d directory
+      file:
+        state: directory
+        mode: '0755'
+        path: /etc/nginx/default.d
+        group: "{{ nginx_group }}"
+        owner: "{{ nginx_user }}"
+    - name: config nginx.conf
+      template:
+        src: "templates/nginx.conf.j2"
+        dest: "/etc/nginx/nginx.conf"
+      notify: reload nginx
+    - name: config web-app.conf
+      template:
+        src: "templates/web-app.conf.j2"
+        dest: "/etc/nginx/default.d/web-app.conf"
+      notify: reload nginx
+  handlers:
+    - include: "handlers/nginx.yaml"

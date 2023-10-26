@@ -1,0 +1,10 @@
+---
+- name: restart nginx
+  systemd:
+    unit: nginx
+    state: restarted
+    enabled: yes
+- name: reload nginx
+  systemd:
+    unit: nginx
+    state: reloaded

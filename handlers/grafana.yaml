@@ -1,0 +1,13 @@
+---
+- name: restart grafana server
+  systemd:
+    unit: grafana-server
+    state: restarted
+    enabled: yes
+
+- name: start prometheus
+  systemd:
+    unit: prometheus
+    state: restarted
+    enabled: yes
+    daemon_reload: yes

@@ -1,0 +1,13 @@
+[balancers]
+nginx1
+
+[app_group]
+app
+
+[all:vars]
+ansible_user=ansible
+ansible_ssh_common_args=' -o StrictHostKeyChecking=no'
+
+[app_group:vars]
+ansible_user=vagrant
+ansible_ssh_private_key_file=/vagrant/.vagrant/machines/app/virtualbox/private_key

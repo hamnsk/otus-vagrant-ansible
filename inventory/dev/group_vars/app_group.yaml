@@ -1,0 +1,4 @@
+grafana_common_packages:
+  - apt-transport-https
+  - software-properties-common
+  - wget

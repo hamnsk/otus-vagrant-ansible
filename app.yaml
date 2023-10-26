@@ -1,0 +1,42 @@
+---
+- hosts: all
+  name: Install Grafana
+  become: true
+  tasks:
+#    - name: install packages
+#      package:
+#        name: "{{ item }}"
+#        state: present
+#        update_cache: yes
+#      with_items: "{{ grafana_common_packages }}"
+    - name: create prometheus dir
+      file:
+        state: directory
+        mode: '0755'
+        path: /opt/prometheus
+#    - name: download prometheus
+#      get_url:
+#        url: https://github.com/prometheus/prometheus/releases/download/v2.47.2/prometheus-2.47.2.linux-amd64.tar.gz
+#        dest: /opt/prometheus
+    - name: unpack prometheus
+      unarchive:
+        src: /vagrant/files/prometheus-2.47.2.linux-amd64.tar.gz
+        dest: /opt/prometheus/
+    - name: place systemd unit
+      template:
+        src: "templates/prometheus.service.j2"
+        dest: "/etc/systemd/system/prometheus.service"
+      notify: start prometheus
+#    - name: add deb config
+#      lineinfile:
+#        path: /etc/apt/sources.list.d/grafana.list
+#        line: "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main"
+#        create: yes
+#    - name: install grafana
+#      package:
+#        name: grafana
+#        state: present
+#        update_cache: yes
+#      notify: restart grafana server
+  handlers:
+    - include: "handlers/grafana.yaml"

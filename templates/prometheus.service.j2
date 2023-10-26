@@ -1,0 +1,16 @@
+[Unit]
+Description=Prometheus Server
+Documentation=https://prometheus.io/docs/introduction/overview/
+After=network-online.target
+
+[Service]
+User=root
+Group=root
+Restart=on-failure
+ExecStart=/opt/prometheus/prometheus-2.47.2.linux-amd64/prometheus \
+  --config.file=/opt/prometheus/prometheus-2.47.2.linux-amd64/prometheus.yml \
+  --storage.tsdb.path=/opt/prometheus/prometheus-2.47.2.linux-amd64/data \
+  --storage.tsdb.retention.time=30d
+
+[Install]
+WantedBy=multi-user.target
