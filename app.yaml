@@ -18,25 +18,39 @@
 #      get_url:
 #        url: https://github.com/prometheus/prometheus/releases/download/v2.47.2/prometheus-2.47.2.linux-amd64.tar.gz
 #        dest: /opt/prometheus
-    - name: unpack prometheus
-      unarchive:
-        src: /vagrant/files/prometheus-2.47.2.linux-amd64.tar.gz
-        dest: /opt/prometheus/
-    - name: place systemd unit
-      template:
-        src: "templates/prometheus.service.j2"
-        dest: "/etc/systemd/system/prometheus.service"
-      notify: start prometheus
+#    - name: unpack prometheus
+#      unarchive:
+#        src: /vagrant/files/prometheus-2.47.2.linux-amd64.tar.gz
+#        dest: /opt/prometheus/
+#    - name: place systemd unit
+#      template:
+#        src: "templates/prometheus.service.j2"
+#        dest: "/etc/systemd/system/prometheus.service"
+#      notify: start prometheus
 #    - name: add deb config
 #      lineinfile:
 #        path: /etc/apt/sources.list.d/grafana.list
 #        line: "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main"
 #        create: yes
+    - name: install grafana from deb
+      apt:
+        deb: https://mirror.yandex.ru/mirrors/packages.grafana.com/enterprise/deb/pool/main/g/grafana/grafana_10.2.0_amd64.deb
+        state: present
+        update_cache: yes
+      notify: restart grafana server
+
 #    - name: install grafana
 #      package:
-#        name: grafana
+#        name: https://mirror.yandex.ru/mirrors/packages.grafana.com/enterprise/deb/pool/main/g/grafana/grafana_10.2.0_amd64.deb
 #        state: present
 #        update_cache: yes
 #      notify: restart grafana server
+
+    - name: restart prometheus
+      systemd:
+        unit: prometheus
+        state: restarted
+        enabled: yes
+        daemon_reload: yes
   handlers:
     - include: "handlers/grafana.yaml"

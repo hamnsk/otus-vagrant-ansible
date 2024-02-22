@@ -8,6 +8,10 @@ app
 ansible_user=ansible
 ansible_ssh_common_args=' -o StrictHostKeyChecking=no'
 
+[balancers:vars]
+ansible_user=vagrant
+ansible_ssh_private_key_file=/vagrant/.vagrant/machines/nginx1/virtualbox/private_key
+
 [app_group:vars]
 ansible_user=vagrant
 ansible_ssh_private_key_file=/vagrant/.vagrant/machines/app/virtualbox/private_key

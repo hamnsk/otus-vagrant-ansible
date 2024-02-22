@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
 #     nginx.vm.network "forwarded_port", guest: 80, host: 8080
     nginx.vm.network "private_network", ip: "192.168.32.10"
     nginx.vm.network "public_network", bridge: "en9: Display", ip: "192.168.1.70"
-    nginx.vm.provision "ansible" do |ansible|
+    nginx.vm.provision "ansible_local" do |ansible|
         ansible.playbook = "balancer.yaml"
         ansible.inventory_path = "inventory/dev"
     end
